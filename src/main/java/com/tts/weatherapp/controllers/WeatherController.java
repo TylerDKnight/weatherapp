@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+// import com.tts.weatherapp.OutfitResponse;
 import com.tts.weatherapp.Request;
 import com.tts.weatherapp.Response;
 import com.tts.weatherapp.WeatherService;
@@ -23,14 +24,19 @@ public class WeatherController {
 
     @PostMapping("/")
     public String postIndex(Request request, Model model) {
-        Response data = weatherService.getForecast(request.getZipCode());
+        Response data;
+        if (request.getDescription() == null || request.getDescription().length() == 0) {
+            data = weatherService.getForecast(request.getZipCode());
+        } else {
+            data = weatherService.getOutfitRecommendation(request.getZipCode(), request.getDescription());
+        }
         model.addAttribute("data", data);
         return "index";
     }
 
     // @GetMapping("/")
     // public String getIndex(Model model) {
-    //     Response response = weatherService.getForecast("02446");
+    //     Response response = weatherService.getForecast("90210");
     //     model.addAttribute("data", response);
     //     return "index";
     // }
